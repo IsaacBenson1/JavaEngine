@@ -42,6 +42,7 @@ public class vector {
     public void setW(double w ){
         this.w = w;
     }
+
     public static vector vectorAdd(vector vec1, vector vec2){
         double newX = vec1.getX()+vec2.getX();
         double newY = vec1.getY()+vec2.getY();
@@ -96,6 +97,12 @@ public class vector {
         double newY1 = (first.getX() * matrix[1][0]) + (first.getY()* matrix[1][1]) + (first.getZ()*matrix[1][2]) + first.getW()*matrix[1][3];
         double newZ1 = (first.getX() * matrix[2][0]) + (first.getY()* matrix[2][1]) + (first.getZ()*matrix[2][2]) + first.getW()*matrix[2][3];
         double newW1 = (first.getX() * matrix[3][0]) + (first.getY()* matrix[3][1]) + (first.getZ()*matrix[3][2]) + first.getW()*matrix[3][3];
+       if (newW1 != 1){
+           newX1 /= newW1;
+           newY1 /= newW1;
+           newZ1 /= newW1;
+       }
+
         vector returner = new vector(newX1,newY1,newZ1,newW1);
         return returner;
     }

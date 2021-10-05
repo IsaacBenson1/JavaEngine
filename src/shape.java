@@ -55,6 +55,13 @@ public class shape {
         return allTriangles[index];
     }
 
+    public void move(double x, double y, double z){
+        triangle[] allTriangles = this.getAllTriangles();
+        for (int i = 0; i < allTriangles.length; i++){
+            allTriangles[i].move(x,y,z);
+        }
+    }
+
     public triangle[] getAllTriangles(){
         return allTriangles;
     }

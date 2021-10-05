@@ -18,7 +18,7 @@ public class frame extends JFrame implements KeyListener {
     }
     public static void main(String args[]) {
         frame thisFrame = new frame();
-        thisFrame.setBackground(Color.BLACK);
+        thisFrame.setBackground(Color.GRAY);
         thisFrame.add(thisFrame.p);
         thisFrame.setVisible(true);
     }
@@ -42,22 +42,28 @@ public class frame extends JFrame implements KeyListener {
     public void cameraMover(vector vCamera,double moveScale, char mover, painter p){
         switch(mover){
             case 'a':
-                vCamera.move(moveScale,0,0);
+                vCamera.move(moveScale/10,0,0);
                 break;
             case 'd':
-                vCamera.move(-moveScale,0,0);
+                vCamera.move(-moveScale/10,0,0);
                 break;
             case 'w':
-                vCamera.move(0,0,moveScale*10);
+                vCamera.move(0,0,moveScale/3);
                 break;
             case 's':
-                vCamera.move(0,0,-moveScale*10);
+                vCamera.move(0,0,-moveScale/3);
                 break;
             case 'q':
                 p.yaw+=moveScale/30;
                 break;
             case 'e':
                 p.yaw-=moveScale/30;
+                break;
+            case 'n':
+                p.adder+=0.0001;
+                break;
+            case 'm':
+                p.adder-=0.0001;
                 break;
         }
     }

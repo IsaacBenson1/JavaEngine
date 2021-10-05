@@ -21,13 +21,13 @@ public class matrix {
         double fov = 90;
         double fovRad = 1/ Math.tan((0.5*fov)/(180*3.14159));
         double near = 0.1;
-        double far = 1000;
+        double far = 100;
         double[][]matrix = new double[4][4];
-        matrix[0][0] = aspectRatio*fovRad;
+        matrix[0][0] = fovRad;
         matrix[1][1] = fovRad;
-        matrix[2][2] = far/(far-near);
+        matrix[2][2] = -far/(far-near);
         matrix[2][3] = (-far * near)/(far-near);
-        matrix[3][2] = 1.0;
+        matrix[3][2] = -1.0;
         matrix[3][3] = 0;
         return matrix;
     }

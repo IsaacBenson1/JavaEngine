@@ -10,16 +10,17 @@ public class painter extends JPanel implements ActionListener {
     // WINDOWS ONE
     //shape myShape = new shape("src\\newCube.obj" );
 
-    public vector vCamera = new vector (0,0,0);
+    public vector vCamera = new vector (0,0,-20);
     public shape[] shapes;
-    private Timer t = new Timer(5,this);
-    double theta = 0;
+    private Timer t = new Timer(1,this);
+    double theta = 0.5;
+    double adder = 0;
     double[][] projMat, xRotMat, cameraRotMat, zRotMat, worldMat, transMat, cameraMat, yRotMat, viewMat;
     Color color = Color.CYAN;
     public Color[] myShapeColors = new Color[myShape.getAllTriangles().length];
     public double[][] fillCords = new double [myShape.getAllTriangles().length][6];
     public double yaw;
-    public double scaler = 10;
+    public double scaler = 100;
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     public double height = size.getHeight();
     public double width = size.getWidth();
@@ -27,7 +28,7 @@ public class painter extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        this.setBackground(Color.black);
+        this.setBackground(Color.GRAY);
         for (int i = 0; i < myShape.getAllTriangles().length; i++) {
             theta += 0.0001;
             fillTriangle(fillCords, i, g2, myShapeColors[i], true, false);
@@ -43,7 +44,7 @@ public class painter extends JPanel implements ActionListener {
         xRotMat = matrix.rotation('x',theta);
         zRotMat = matrix.rotation('z',theta);
         cameraRotMat = matrix.rotation('y',yaw);
-        transMat = matrix.translation(0,0,10);
+        transMat = matrix.translation(0,0,0);
         worldMat = matrix.multiplyMatrixMatrix(xRotMat,zRotMat);
         worldMat = matrix.multiplyMatrixMatrix(worldMat,yRotMat);
         worldMat = matrix.multiplyMatrixMatrix(worldMat,transMat);
@@ -57,6 +58,7 @@ public class painter extends JPanel implements ActionListener {
         for (triangle currentTri: myShape.getAllTriangles()){
             double lightDp;
             vector line1 = oner;
+            vector triCenter = oner;
             vector line2 = oner ;
             vector normal = oner;
             vector vCameraRay = oner;
@@ -68,27 +70,22 @@ public class painter extends JPanel implements ActionListener {
             line2 = vector.subtract(triTransformed.getVec3(), triTransformed.getVec1());
             normal = vector.crossProduct(line1,line2);
             normal.normalize();
-            vCameraRay = vector.subtract(triTransformed.getVec1(), vCamera);
+            triCenter = vector.vectorAdd(triTransformed.getVec1(),triTransformed.getVec2());
+            triCenter = vector.vectorAdd(triCenter, triTransformed.getVec3());
+            triCenter = vector.multiply(triCenter, 1.0/3);
+            vCameraRay = vector.subtract(triCenter, vCamera);
+            lightDirection = vector.subtract(triCenter,vCameraRay);
+            lightDirection.normalize();
+            lightDp = vector.dotProduct(lightDirection,normal);
             checker = (vector.dotProduct(normal,vCameraRay) < 0.0 );
+           // checker = true;
             if (checker){
-                lightDirection = new vector(0,0,-1);
-                lightDirection.normalize();
-                lightDp = vector.dotProduct(lightDirection,normal);
                 if(lightDp<0){
-                   // lightDp*=- 1;
+                    lightDp*=- 1;
                 }
                 myShapeColors[i] = new Color((int)(color.getRed()*lightDp)%255,(int)(color.getGreen()*lightDp)%255,(int)(color.getBlue()*lightDp)%255);
                 triViewed = triangle.multiplyMatrix(triTransformed,viewMat);
                 triProjected = triangle.multiplyMatrix(triViewed,projMat);
-
-
-                /*System.out.println(triTransformed);
-                System.out.println(matrix.printMat(viewMat));
-                System.out.println(triViewed);
-                System.out.println(matrix.printMat(projMat));
-                System.out.println(triProjected);
-                System.out.println("_________________________");*/
-
                 triProjected.scale(scaler);
                 triProjected.move(width/2,height/2,0);
             }
