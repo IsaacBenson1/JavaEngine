@@ -36,34 +36,42 @@ public class frame extends JFrame implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        //  System.out.println(e.getKeyChar());
 
     }
     public void cameraMover(vector vCamera,double moveScale, char mover, painter p){
+        double x = Math.cos(-p.yaw);
+        double z = Math.sin(-p.yaw);
+      //  System.out.println(x+" "+z);
         switch(mover){
             case 'a':
-                vCamera.move(moveScale/10,0,0);
+                vCamera.move(x*moveScale, 0,z*moveScale );
                 break;
             case 'd':
-                vCamera.move(-moveScale/10,0,0);
+                vCamera.move(-x*moveScale, 0, -z*moveScale);
                 break;
             case 'w':
-                vCamera.move(0,0,moveScale/3);
+                vCamera.move(z*moveScale,0,x*moveScale);
                 break;
             case 's':
-                vCamera.move(0,0,-moveScale/3);
+                vCamera.move(-z*moveScale,0,-x*moveScale);
                 break;
             case 'q':
-                p.yaw+=moveScale/30;
+                p.yaw-=moveScale/57.2958;
                 break;
             case 'e':
-                p.yaw-=moveScale/30;
+                p.yaw+=moveScale/57.2958;
                 break;
             case 'n':
-                p.adder+=0.0001;
+                p.adder+=0.000001;
                 break;
             case 'm':
-                p.adder-=0.0001;
+                p.adder-=0.000001;
+                break;
+            case 't':
+                vCamera.move(0,moveScale/3,0);
+                break;
+            case 'g':
+                vCamera.move(0,-moveScale/3,0);
                 break;
         }
     }

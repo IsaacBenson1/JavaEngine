@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class painter extends JPanel implements ActionListener {
     // MAC ONE
-    shape myShape = new shape("src/newCube.obj");
+    shape myShape = new shape("src/teapot.obj");
     // WINDOWS ONE
     //shape myShape = new shape("src\\newCube.obj" );
 
@@ -30,7 +30,7 @@ public class painter extends JPanel implements ActionListener {
         Graphics2D g2 = (Graphics2D) g;
         this.setBackground(Color.GRAY);
         for (int i = 0; i < myShape.getAllTriangles().length; i++) {
-            theta += 0.0001;
+            theta += adder;
             fillTriangle(fillCords, i, g2, myShapeColors[i], true, false);
         }
         t.start();
